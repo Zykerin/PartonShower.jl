@@ -31,21 +31,18 @@ mutable struct Particle
     continueEvolution::Bool
     aorb::String
     children::Vector{Particle}
-
-
 end
 
+# Structure for an invidvidual jet
 struct Jet
    AllParticles::Vector{Particle}
    Progenitor::Particle
 end
 
-
+# Structure for an event
 struct Event
    AllParticles::Vector{Particle}
    Jets::Vector{Any}
-
-
 end
 
 

@@ -87,10 +87,6 @@ function dsigma(x::Float64, q::Int64)
     return 3 * 2 * pi * (alpha^2)/ (4 * s) * (A0(q) * (1 + x^2) + A1(q) * x) 
 end
 
-function f2(x::Float64, q::Int64)
-    return 3 * 2 * pi * (alpha^2)/ (4 * s) * ( (1 + x^2)) * eq(q)^2
-end
-
 # The function to perform Monte Carlo integration
 function mcInt(func, x1, x2, N)
 
@@ -135,35 +131,6 @@ function mcInt(func, x1, x2, N)
 
     return I, error, maxW, xmaxW
 end
-
-
-
-#=
-global const N = 1E8
-
-# Get the integrated cross section and compare it to the analytical for accuracy
-Integ, Err, maxW, xmaxW = mcInt(dsigma, -1, 1, N)
-global actual = 0
-for i in range(1, 4)
-    if i == 1
-        q =1
-    elseif i == 2
-        q = 2
-    elseif i == 3
-        q =2
-    elseif i == 4
-        q = 1
-    else
-        q =2
-    end
-    global actual += 4 * pi * ((alpha^2) / (s )) * A0(q)
-    #global actual += 4 * pi * ((alpha^2 * kappa^2) / ( gammaZ^2 )) * (Af(q)^2 + Vf(q)^2) * A0(q)
-end
-
-print("The result from Monte Carlo integration is " * string(Integ*pb) * " +- " * string(Err* pb) * ", while the analytical is " * string(actual*pb) * ".\n" )
-print("The difference is " * string(abs(Integ*pb - actual*pb)) * "pb. \n")
-
-=#
 
 
 function eventGen(func, x1, x2, nGen, nInt)

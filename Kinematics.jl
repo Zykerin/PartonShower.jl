@@ -236,12 +236,10 @@ function reconSudakovBasis(prog::Particle, progPart::Particle)
         if current.status == -1 
             # If its first child has a zero beta then append itself to the stack and go to the first child
             if current.children[1].beta == 0 
-                #print("Hit child 1 \n")
                 push!(stack, current)
                 current = current.children[1]
             # Check same with the second child
             elseif current.children[2].beta == 0
-                #print("Hit child 2 \n")
                 push!(stack, current)
                 current = current.children[2]
             # If both childre have a nonzero beta, then caclulate this particles beta and go to its parent/ top in stack
@@ -304,8 +302,6 @@ function calculatePhysicals(part::Particle, prog::Particle, progPart::Particle, 
 
     alpha = parent.alpha * part.z
     part.alpha = alpha
-    
-  
 
     if part.aorb == "c"
         kT = [-part.pT * cos(part.phi), -part.pT * sin(part.phi), 0 , 0] # pT = (px, py, pz, E)
@@ -313,10 +309,6 @@ function calculatePhysicals(part::Particle, prog::Particle, progPart::Particle, 
         kT = [part.pT * cos(part.phi), part.pT * sin(part.phi), 0 , 0] # pT = (px, py, pz, E)
     end
     part.qT = [parent.qT[1] * part.z + kT[1], parent.qT[2] * part.z + kT[2], 0, 0] # qT = (px, py, pz, E)
-    
-
-  
-
 end
 
 function dot4Vec(v1::Vector{Float64}, v2::Vector{Float64})
@@ -335,26 +327,4 @@ function findColorPartner(parti::Particle, particles::Vector{Particle})
     end 
     return partner
 
-end
-
-# Function to check that momentum is conserved for each individual particle
-function checkMomCons(p::Particle)
-    energy = sqrt(p.px^2 + p.py^2 + p.pz^2)
-
-    if abs(energy - p.E) > 1E-5
-        print("Momentum not conserved: momentum = " * string(energy) * ", actual = " * string(p.E) * ", difference= " * string(abs(energy-p.E)) * "\n")
-    end
-
-end
-
-# Function to check the global momentum conservation
-function checkGlobalMomCons(ev::Event)
-    tot = [0, 0, 0, 0]
-    for p in ev.AllParticles
-        if p.status == 1
-            tot += [p.px, p.py, p.pz, p.E]
-        end
-    end
-
-    print("The total momentum is " * string(tot)* "\n")
 end

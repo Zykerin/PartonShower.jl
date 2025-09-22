@@ -1,6 +1,5 @@
 
 
-
 function writeLHE(infile, events, shat, ECM, sigma, stddev)
 
     open(infile, "w") do file
@@ -40,30 +39,7 @@ function writeLHE(infile, events, shat, ECM, sigma, stddev)
                 append!(anticolours, Int(p[9]))
             end
             
-            
-            #=
-            if abs(p[1]) > 0 && abs(p[1]) < 6 # q or qbar -> this only works for the specific process e+e- -> qqbar
-                
-                if p[1] < 0
-                    append!(colours, 0)
-                    append!(anticolours, 501)
-                elseif p[1] > 0
-                    append!(colours, 501)
-                    append!(anticolours, 0)
-                end
-
-            end
-            if p[1] == 21 # Gluons are singlets for now
-                ng = ng + 1
-                append!(colours, 500 + 2 * ng)
-                append!(anticolours, 500+ 2 * ng)
-            end
-            =#
         end
-        
-        
-       
-
             write(file, "<event>\n")
             write(file, string(length(momenta)) * "\t 9999\t 1.000000\t" * string(sqrt(shat))* "\t 0.0078125 \t 0.1187\n")
             for i in range(1, length(momenta))

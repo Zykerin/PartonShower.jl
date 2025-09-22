@@ -15,6 +15,7 @@ global numGen::Int64 = 1E6
 
 arguments = ArgParseSettings()
 
+# The table to implement command line arguments
 @add_arg_table arguments begin
     "--generate"
         help = "Generate the hard proccess events then shower them"
@@ -43,6 +44,7 @@ args = parse_args(arguments)
 
 outputFile::String = args["outfile"]
 
+# Parsing the inputted arguments
 if args["generate"]
     global whichEvents = "generate"
     global numGen = args["N"]
@@ -55,18 +57,18 @@ outputFile::String = args["outfile"]
 if last(outputFile, 4) != ".lhe"
       outputFile *= ".lhe"
 end
-#outputFile::String = "juliaShower.lhe"
-#outputFile::String = "juliaColorStructureSmall.lhe"
+
 error::Float64 = 0.1
 sigma::Float64 = 1.2
 myEvents = []
 
+
+# Case to read an lhe file
 if whichEvents == "lhe"
     print("LHE file selected. \n")
     error = 0.1
     sigma = 1.2
-    inputFile::String = "eejj_ECM206_1E6.lhe.gz"
-    #inputFile::String = "eejj_ECM206.lhe.gz"
+    inputfile::String = args["infile"]
     
     print("Reading Events from " * inputFile * "\n")
     events = parse_lhe(inputFile)
@@ -80,6 +82,7 @@ if whichEvents == "lhe"
         push!(myEvents, newEvent)
 
     end
+# Case to generate the hard proccess events (e+e- -> qqbar)
 elseif whichEvents == "generate"
     print("Generate events selected\n")
     print("Now generating " * string(numGen)* " events\n")

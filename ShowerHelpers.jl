@@ -26,7 +26,6 @@ function zBounds(masses::Vector{Float64}, t::Float64, branchType::Int8)
 
    if branchType == 1 || branchType == 3
        return 0.5 * (1 + sqrt(1 - 4 * sqrt((mu^2 + pT2min)/t))), 0.5 * (1 - sqrt(1 - 4 * sqrt((mu^2 + pT2min)/t)))
-       #return 1 - sqrt( (mu^2 + pT2min)/ t), sqrt((mu^2 + pT2min)/t)
    elseif branchType == 2
        return 1 - sqrt((Qg^2 + pT2min)/t), sqrt((mu^2 + pT2min)/t)
    end
@@ -46,31 +45,10 @@ function EvolutionScale(p1::Particle, p2::Particle)
     return QTilde
 end
 
-# The emission scale function.
-# Need to solve this function for 0 to find the next emisison scale
-function E(t::Float64, Q::Float64, R1::Float64, aSover::Float64, tGamma::Function, masses::Vector{Float64}, branchType::Int8)
-    zup, zlow = zBounds(masses, t, branchType)
-    r = tGamma(zup, aSover) - tGamma(zlow, aSover)
-    return log(t/Q^2) - log(R1)/r
-end
 
-# The function to determine the next emission scale by numerically solving the emission scale functions E(t)
-function tEmission(Q::Float64, R1::Float64, aSover::Float64, tmin::Float64, tGamma::Function, masses::Vector{Float64}, branchType::Int8)
-
-    E2 = (t -> E(t, Q, R1, aSover, tGamma, masses, branchType))
-    t::Float64 = find_zero(E2, (tmin, Q^2))
-
-    continueEvolve = true
-    if abs(E2(t)) > 1E-4
-        continueEvolve = false
-    end
-
-    return t, continueEvolve
-
-end
 
 # The function to obtain the next t emission directly
-function gettEmisisonDirect(Q::Float64, R1::Float64, Qcut::Float64, aSover::Float64, tGamma::Function, masses::Vector{Float64}, branchType::Int8)
+function tEmission(Q::Float64, R1::Float64, Qcut::Float64, aSover::Float64, tGamma::Function, masses::Vector{Float64}, branchType::Int8)
     if branchType == 3 || branchType == 1
         if Q < 16 * (masses[1]^2 + pT2min)
             return Q^2, false
@@ -79,6 +57,7 @@ function gettEmisisonDirect(Q::Float64, R1::Float64, Qcut::Float64, aSover::Floa
     zup, zlow = zBounds(masses, Q^2, branchType)
     upper = tGamma(zup, aSover)
     lower = tGamma(zlow, aSover)
+    # Veto if the bounds are unphysical
     if lower > upper 
         return Q^2, false
     end
@@ -86,13 +65,16 @@ function gettEmisisonDirect(Q::Float64, R1::Float64, Qcut::Float64, aSover::Floa
 
     t = Q^2 * R1^r
     if branchType == 3 || branchType == 1
+        # Veto for t that would be unphyiscal for gluon emitting
         if t < 16 * (masses[1]^2 + pT2min)
             return Q^2, false
         end
     end
+    # Veto condition of minimum t if quark emitting 
     if branchType == 2 && t < 4 * Qcut^2
         return Q^2, false
     end
+    # Veto is t is nan
     if isnan(t) 
         return Q^2, false
     end
