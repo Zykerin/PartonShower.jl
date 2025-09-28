@@ -3,6 +3,9 @@ module PartonShower
 export generateEvents
 export writeLHE
 export showerEvent
+export pTmin
+export aSover
+
 
 include("Constants.jl")
 include("SplittingFunctions.jl")
@@ -12,7 +15,6 @@ include("Shower.jl")
 include("HardProccessEventGenerator.jl")
 using LHEF
 using ProgressBars
-using ArgParse
 
 
 

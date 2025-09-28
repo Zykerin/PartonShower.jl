@@ -3,7 +3,21 @@ uuid = "a32c89ae-d023-4659-8493-2353e71a7a82"
 authors = ["Caitlyn G"]
 version = "1.0.0-DEV"
 
+[deps]
+LHEF = "4dba1963-fdf1-41a9-b228-d13b5fa087e3"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+ProgressBars = "49802e3a-d2f1-5c88-81d8-b72133a6f568"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
+
 [compat]
+LHEF = "0.3.0"
+LinearAlgebra = "1.11.0"
+ProgressBars = "1.5.1"
+Random = "1.11.0"
+Roots = "2.2.10"
+StatsBase = "0.34.6"
 julia = "1.6.7"
 
 [extras]
