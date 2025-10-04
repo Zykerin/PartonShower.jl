@@ -155,9 +155,9 @@ function globalMomCons(showeredParticles::Vector{Particle}, Jets::Vector{Jet})
     # Get the k factor
     k = solvekFactor(pj, qj, sqrts)
     rotatedShoweredParticles = []
-    # Get the electron's and postirons and append them to the list of roated showered particles since these don't need to be rotated
+    # Get the particles that are not quarks or gluons and add them to the list of final particles without boosting them
     for p in showeredParticles
-        if abs(p.id) == 11
+        if (abs(p.id) < 0 || abs(p.id) > 6 ) && abs(p.id) != 21
             push!(rotatedShoweredParticles, p)
         end
     end
@@ -169,8 +169,6 @@ function globalMomCons(showeredParticles::Vector{Particle}, Jets::Vector{Jet})
             push!(rotatedShoweredParticles, j.AllParticles[1])
         end
     else
-        if length(Jets[1].AllParticles) == 1 || length(Jets[2].AllParticles) == 1
-        end
         for (i, jet) in enumerate(Jets)
         
             # Get the boost factor

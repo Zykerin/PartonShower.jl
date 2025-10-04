@@ -2,8 +2,8 @@ include("Structures.jl")
 using StatsBase
 
 global const alpha::Float64 = 1/132.507
-global const ECM::Float64 = 206
-global const s::Float64 = ECM^2
+#global const ECM::Float64 = 206
+#global const s::Float64 = ECM^2
 # Define GeV to pb conversion
 global const pb::Float64 = 3.894E8
 
@@ -57,6 +57,7 @@ function Af(which::Int64)
 
 end
 
+#=
 global const kappa::Float64 = (sqrt(2) * Gf * (MZ^2))/(4 * pi * alpha)
 global const chi1::Float64 = (kappa * s * (s - MZ^2)) / ((s - MZ^2)^2 + gammaZ^2 * MZ^2)
 global const chi2::Float64 = (kappa^2 * s^2) / ((s - MZ^2)^2 + gammaZ^2 * MZ^2)
@@ -69,6 +70,7 @@ end
 function A1(which::Int64)
     return -4 * Qf(which) * Af(4) * Af(which) * chi1 + 8 * Af(4) * Vf(4) * Af(which) * Vf(4) * chi2
 end
+=#
 
 # Function for the different charge of the quark
 function eq(q::Int64)
@@ -83,12 +85,27 @@ end
 
 
 # The differential cross section function 
-function dsigma(x::Float64, q::Int64)
+function dsigma(x::Float64, q::Int64, ECM::Float64)
+    #const ECM::Float64 = 206
+    s::Float64 = ECM^2
+    kappa::Float64 = (sqrt(2) * Gf * (MZ^2))/(4 * pi * alpha)
+    chi1::Float64 = (kappa * s * (s - MZ^2)) / ((s - MZ^2)^2 + gammaZ^2 * MZ^2)
+    chi2::Float64 = (kappa^2 * s^2) / ((s - MZ^2)^2 + gammaZ^2 * MZ^2)
+
+
+    function A0(which::Int64)
+        return  Qf(which)^2 - 2 * (Qf(which)) * Vf(which) * Vf(4) * chi1 + (Af(4)^2 + Vf(4)^2) * (Af(which)^2 + Vf(which)^2) * chi2
+    end
+
+    function A1(which::Int64)
+        return -4 * Qf(which) * Af(4) * Af(which) * chi1 + 8 * Af(4) * Vf(4) * Af(which) * Vf(4) * chi2
+    end
+
     return 3 * 2 * pi * (alpha^2)/ (4 * s) * (A0(q) * (1 + x^2) + A1(q) * x) 
 end
 
 # The function to perform Monte Carlo integration
-function mcInt(func, x1, x2, N)
+function mcInt(func, x1::Float64, x2::Float64, N::Int64, ECM::Float64)
 
     sumw = 0
     sumwsq = 0
@@ -113,9 +130,8 @@ function mcInt(func, x1, x2, N)
             else
                 q =2
             end
-            functot += func(xi, q)
+            functot += func(xi, q, ECM)
         end
-        functot
         yi = (x2 - x1) * functot
         sumw += yi
         sumwsq += yi^2
@@ -133,11 +149,11 @@ function mcInt(func, x1, x2, N)
 end
 
 
-function eventGen(func, x1, x2, nGen, nInt)
-    IntAllFlav, Err, maxW, xmaxW = mcInt(dsigma, x1, x2, nInt)
+function eventGen(func, x1, x2, nGen, nInt, ECM::Float64)
+    IntAllFlav, Err, maxW, xmaxW = mcInt(dsigma, x1, x2, nInt, ECM)
     count = 0
 
-    eventList = []
+    eventList::Vector{Float64} = []
     # Keep attempting to generate events until the number of required events is met
     while count < nGen
         xi = (x2 - x1) * rand() + x1
@@ -156,7 +172,7 @@ function eventGen(func, x1, x2, nGen, nInt)
             else
                 q =2
             end
-            functot += func(xi, q)
+            functot += func(xi, q, ECM)
         end
         yi = (x2 - x1) * functot
         # Condition to accept the event
@@ -173,9 +189,9 @@ end
 
 
 # Function to reconstruct the momenta of the event 
-function reconMomenta(events)
+function reconMomenta(events::Vector{Float64}, ECM::Float64)
     reconEvents = []
-    energy = sqrt(s) /2
+    energy = ECM /2
 
     # Go through each event and reconstruct it in the form of a particle class
     for costh in events
@@ -202,8 +218,8 @@ function reconMomenta(events)
                 q =2
             end
             # Get the weight for this specific quark
-            append!(weights, dsigma(costh, q))
-            totsigma += dsigma(costh, q)
+            append!(weights, dsigma(costh, q, ECM))
+            totsigma += dsigma(costh, q, ECM)
         end
         items = [1, 2, 3, 4]
         # Choose the quark flavor
@@ -220,11 +236,11 @@ function reconMomenta(events)
 end
 
 # Function to actually generate the events
-function generateEvents(nEvents, nInt)
+function generateEvents(nEvents::Int64, nInt::Int64, ECM::Float64)
     # Generate the events
-    events, Integ, error = eventGen(dsigma, -1, 1, nEvents, nInt)
+    events, Integ, error = eventGen(dsigma, -1.0, 1.0, nEvents, nInt, ECM)
     # Reconstruct the momenta
-    finalEvents = reconMomenta(events)
+    finalEvents = reconMomenta(events, ECM)
 
     return finalEvents, Integ*pb, error*pb
 end

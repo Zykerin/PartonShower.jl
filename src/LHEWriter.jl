@@ -1,8 +1,10 @@
 
 
 function writeLHE(infile, events, shat, ECM, sigma, stddev)
-
+    
     open(infile, "w") do file
+    
+    # Write the header for the lhe file
     write(file, "<LesHouchesEvents version =\"1.0\">\n")
     write(file, "<!--\n")
     write(file, "File generated with lhe Julia writer\n")
@@ -12,6 +14,7 @@ function writeLHE(infile, events, shat, ECM, sigma, stddev)
     write(file, "\t" * string(sigma) * "\t" * string(stddev) * "\t1.00000 \t9999\n")
     write(file, "</init>\n")
 
+    # Iterate through the events
     for (eventno, event) in enumerate(events)
         ng = 0
         status = Int64[]
@@ -21,17 +24,20 @@ function writeLHE(infile, events, shat, ECM, sigma, stddev)
         anticolours = []
         helicities = []
         relations = []
+        # Iterate through the particles in each event
         for p in event
             push!(momenta, [p[3], p[4], p[5], p[6]])
             append!(status, Int(p[2]))
-            if p[2] == -1
+            # Check if the particle is a final state particle
+            if p[2] != 1
                 push!(relations, [0,0])
             elseif p[2] == 1
                 push!(relations, [1, 2])
             end
             append!(flavours, Int(p[1]))
             append!(helicities, 1)
-            if abs(p[1]) == 11
+            # Check if the particle is neither a quark nor a gluon and add no color to it
+            if (abs(p[1]) < 0 || abs(p[1]) > 6) && abs(p[1]) !=21
                 append!(colours, 0)
                 append!(anticolours, 0)
             else

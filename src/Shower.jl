@@ -290,19 +290,27 @@ function showerEvent(event::Event, Qmin::Float64, aSover::Float64)
     # Go through the list of particles in the event and get the ones that will be showered and append them to a list
     # This is needed since both particles are needed for the initial evolution scale
     for p in event.Jets
-        # Check if the particle is an electron or positron to skip it
-        if abs(p.id) == 11
-            push!(AllParticles, p)
+        # Check if the particle is a gluon or quark and add it to the list to shower
+        if abs(p.id) == 21
+            push!(plist, p)
         elseif abs(p.id) < 6 && abs(p.id) > 0 && p.status == 1 # Only shower final state particles
             push!(plist, p)
+        else
+            push!(AllParticles, p)
         end 
     end
 
     # Set the initial evolution scale for the two progenitors
     plist[1].t, plist[2].t = EvolutionScale(plist[1], plist[2])
-
+    
     # Get the current larges color value for this event
-    global currentcolor = maximum([p.color for p in plist])
+    colors = []
+    for p in plist
+        push!(colors, p.color)
+        push!(colors, p.antiColor)
+    end
+    
+    global currentcolor = maximum(colors)
 
     for (i, p) in enumerate(plist)
         jet = Jet([], p)
