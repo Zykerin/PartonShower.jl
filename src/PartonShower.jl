@@ -1,11 +1,11 @@
 module PartonShower
 
 export generateEvents
-export WriteToLHE
-export writeLHE
 export showerEvent
 export pTmin
 export aSover
+
+export WriteToLHE
 export ShowerLHE
 
 
@@ -48,18 +48,6 @@ function ShowerLHE(inputFile::String)
     end
 
     return showeredEvents, ECM
-end
-
-# Function to shower each event in a given list
-function ShowerEvents(events::Vector{Event})
-    showeredEvents = []
-
-    for (i, ev) in tqdm(enumerate(events))
-        newEvent = showerEvent(ev, pTmin, aSover)
-        push!(showeredEvents, newEvent)
-    end
-
-    return showeredEvents
 end
 
 # Function to take in a list of showered events and then write them to a lhe file
