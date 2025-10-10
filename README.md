@@ -32,24 +32,24 @@ Along with the `Event` structure there is the `Particle` and `Jet` structures wh
 
 - `Particle` - Contains the information for one particle
 
-    - ` id ` - What type of particle it is, (ex. 21 = gluon)
-    - ` status ` - The status of the particle
-    - ` t ` - The starting scale for this particle
-    - ` z ` - The light-cone momentum fraction of this particle
-    - ` m` - The mass of the particle
-    - ` pT` - The transverse momentum of the particle
-    - ` px ` - The momentum in the x-axis
-    - ` py ` - The momentum in the y-axis
-    - ` pz ` - The momentum in the z-axis
-    - ` E ` - The energy of the particle 
-    - ` phi ` - The azimuthal angle of the particle
-    - ` qT ` - The remaining compontents of the momentum according to the Sudakov basis
-    - ` color ` - The color of the particle of the form 5xx
-    - ` anticolor ` - The anticolor of the particle also of the form 5xx
-    - ` alpha ` - The $\alpha$ value in the Sudakov basis 
-    - ` beta ` - The $ \beta $ value in the Sudakov basis
-    - ` virtuality` - The virtuality of the particle
-    - ` children` - A list containing the particle's children, if any
+    - `id` - What type of particle it is, (ex. 21 = gluon)
+    - `status` - The status of the particle
+    - `t` - The starting scale for this particle
+    - `z` - The light-cone momentum fraction of this particle
+    - `m` - The mass of the particle
+    - `pT` - The transverse momentum of the particle
+    - `px` - The momentum in the x-axis
+    - `py` - The momentum in the y-axis
+    - `pz` - The momentum in the z-axis
+    - `E` - The energy of the particle 
+    - `phi` - The azimuthal angle of the particle
+    - `qT` - The remaining compontents of the momentum according to the Sudakov basis
+    - `color` - The color of the particle of the form 5xx
+    - `anticolor` - The anticolor of the particle also of the form 5xx
+    - `alpha` - The $\alpha$ value in the Sudakov basis 
+    - `beta` - The $ \beta $ value in the Sudakov basis
+    - `virtuality` - The virtuality of the particle
+    - `children` - A list containing the particle's children, if any
 
 - `Jet` - A structure for a singular jet of an event which contains
 
