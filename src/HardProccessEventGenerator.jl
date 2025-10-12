@@ -1,4 +1,3 @@
-include("Structures.jl")
 using StatsBase
 
 global const alpha::Float64 = 1/132.507

@@ -1,5 +1,6 @@
 using Roots
 include("Structures.jl")
+include("HardProccessEventGenerator.jl")
 include("Constants.jl")
 
 # Function to get the transverse momentum squared
