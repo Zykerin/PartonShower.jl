@@ -1,13 +1,12 @@
 module PartonShower
 
+
 export generateEvents
+export WriteToLHE
 export showerEvent
 export pTmin
 export aSover
-
-export WriteToLHE
 export ShowerLHE
-
 
 include("Constants.jl")
 include("SplittingFunctions.jl")
@@ -15,13 +14,17 @@ include("LHEWriter.jl")
 include("Structures.jl")
 include("Shower.jl")
 include("HardProccessEventGenerator.jl")
+
+
+
+
 using LHEF
 using ProgressBars
 
 
 # Function to read a lhe file using LHEF and then shower then events
 function ShowerLHE(inputFile::String)
-    events = []
+    events::Vector{Event} = []
 
 
     # Read the lhe file and turn the LHEF events into events that the parton shower can work with
@@ -43,12 +46,15 @@ function ShowerLHE(inputFile::String)
     showeredEvents::Vector{Event} = []
 
     for (i, ev) in tqdm(enumerate(events))
+        print(ev)
         newEvent = showerEvent(ev, pTmin, aSover)
         push!(showeredEvents, newEvent)
     end
 
     return showeredEvents, ECM
 end
+
+
 
 # Function to take in a list of showered events and then write them to a lhe file
 function WriteToLHE(showeredEvents::Vector{Event}, outputFile::String, ECM::Float64, sigma::Float64, error::Float64)
@@ -67,6 +73,9 @@ function WriteToLHE(showeredEvents::Vector{Event}, outputFile::String, ECM::Floa
     writeLHE(outputFile, showeredEV, ECM^2, ECM, sigma, error)
 
 end
+
+eventhz, energyhz = ShowerLHE("ee_hz_ggmumu.lhe.gz")
+
 
 
 end
