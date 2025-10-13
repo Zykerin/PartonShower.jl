@@ -47,7 +47,7 @@ Along with the `Event` structure there is the `Particle` and `Jet` structures wh
     - `color` - The color of the particle of the form 5xx
     - `anticolor` - The anticolor of the particle also of the form 5xx
     - `alpha` - The $\alpha$ value in the Sudakov basis 
-    - `beta` - The $ \beta $ value in the Sudakov basis
+    - `beta` - The $\beta$ value in the Sudakov basis
     - `virtuality` - The virtuality of the particle
     - `children` - A list containing the particle's children, if any
 
