@@ -5,7 +5,7 @@
 <h2> Description </h2>
 
 
-A simple angular-ordered final-state QCD parton shower written in Julia [citation]. This shower is valid for any event that has colorless initial-state particles.
+A simple angular-ordered final-state QCD parton shower written in Julia [[1]](#1)[[2]](#2). This shower is valid for any event that has colorless initial-state particles.
 
 
 
@@ -43,11 +43,11 @@ Along with the `Event` structure there is the `Particle` and `Jet` structures wh
     - `pz` - The z-component of momentum.
     - `E` - The energy of the particle.
     - `phi` - The azimuthal angle of the particle around the z-axis.
-    - `qT` - The remaining components of the momentum according to the Sudakov basis [citation]. 
+    - `qT` - The remaining components of the momentum according to the Sudakov basis [[1]](#2)[[3]](#3). 
     - `color` - The color of the particle in the form xxx.
     - `anticolor` - The anticolor of the particle also in the form xxx.
-    - `alpha` - The $\alpha$ value in the Sudakov basis [citation].
-    - `beta` - The $\beta$ value in the Sudakov basis [citation].
+    - `alpha` - The $\alpha$ value in the Sudakov basis.
+    - `beta` - The $\beta$ value in the Sudakov basis.
     - `virtuality` - The virtuality of the particle. 
     - `children` - A list containing the particle's children, if any. 
 
@@ -73,3 +73,13 @@ WriteToLHE(showeredEvents, "Showeredeejj_ECM206.lhe", energy, sigma, sstdev)
 The `sigma` value is the evaluated cross section of the events and the `sstdev` is the error of it.  
 
 <h2> References </h2>
+
+<a id ="1">[1] </a>
+Bahr, M., and Others. ‘Herwig++ Physics and Manual’. Eur. Phys. J. C, vol. 58, 2008, pp. 639–707, https://doi.org/10.1140/epjc/s10052-008-0798-9. arXiv.
+
+<a id ="2"> [2] </a> 
+Papaefstathiou, Andreas. ‘$\texttt{Pyresias}$: How To Write a Toy Parton Shower’. arXiv [Hep-Ph], 6 2024, arxiv.org/abs/2406.03528. arXiv.
+
+
+<a id="3">[3] </a> 
+Gieseke, Stefan, et al. ‘New Formalism for QCD Parton Showers’. JHEP, vol. 12, 2003, p. 045, https://doi.org/10.1088/1126-6708/2003/12/045. arXiv.
