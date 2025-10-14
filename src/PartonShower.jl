@@ -14,19 +14,39 @@ include("LHEWriter.jl")
 include("Shower.jl")
 
 using LHEF
+using EzXML
 using ProgressBars
 
 
 # Function to read a lhe file using LHEF and then shower then events
 function ShowerLHE(inputFile::String)
+    #Vector to hold the events in
     events::Vector{Event} = []
+
+    #String to hold the event information
+    eventinfo::String = ""
+
+    # Get the information about the type of events this file contains'
+    open(EzXML.StreamReader, "ee_hz_ggmumu.lhe.gz") do reader 
+
+        #Loop to iterate the file until the event info is found
+        while true
+        #Check if the reader has the events info and then break
+        if reader.name == "init"
+            eventinfo = reader.content
+            break
+        end
+            iterate(reader)
+
+        end
+    end
 
 
     # Read the lhe file and turn the LHEF events into events that the parton shower can work with
     lheevents = parse_lhe(inputFile)
 
     #Get the center of mass energy 
-    ECM = lheevents[1].header.scale
+    energy = lheevents[1].header.scale
 
     for ev in lheevents
         newEvent = Event([], [])
@@ -44,7 +64,7 @@ function ShowerLHE(inputFile::String)
         push!(showeredEvents, newEvent)
     end
 
-    return showeredEvents, ECM
+    return showeredEvents, eventinfo
 end
 
 
@@ -68,3 +88,7 @@ end
 
 
 end
+
+using .PartonShower
+
+events, energy = ShowerLHE("ee_hz_ggmumu.lhe.gz");
