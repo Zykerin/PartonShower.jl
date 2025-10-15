@@ -41,17 +41,18 @@ function ShowerLHE(inputFile::String)
         end
     end
 
-
+    eventinfo = lstrip(eventinfo, ' ')
     # Read the lhe file and turn the LHEF events into events that the parton shower can work with
     lheevents = parse_lhe(inputFile)
 
-    #Get the center of mass energy 
-    energy = lheevents[1].header.scale
+    # List to hold each event's info
+    eventsHeader = []
 
     for ev in lheevents
         newEvent = Event([], [])
         for p in ev.particles
             newP = Particle(p.id, p.status, 0, 1, (p.m), 0, p.px, p.py, p.pz, p.e, 0, [0, 0, 0, 0], p.color1, p.color2, 1, 0, 0, true, "", [])
+            push!(eventsHeader, [ev.header.scale, ev.header.pid, ev.header.weight, ev.header.aqed, ev.header.aqcd])
             push!(newEvent.Jets, newP)
         end
         push!(events, newEvent)
@@ -64,12 +65,12 @@ function ShowerLHE(inputFile::String)
         push!(showeredEvents, newEvent)
     end
 
-    return showeredEvents, eventinfo
+    return showeredEvents, eventinfo, eventsHeader
 end
 
 
 # Function to take in a list of showered events and then write them to a lhe file
-function WriteToLHE(showeredEvents::Vector{Event}, outputFile::String, ECM::Float64, sigma::Float64, error::Float64)
+function WriteToLHE(showeredEvents::Vector{Event}, outputFile::String, eventInfo::String, eventHeaders::Vector{})
     showeredEV = []
     # Turn the shower format into one that is readable by the LHEWriter
     for ev in showeredEvents
@@ -82,7 +83,7 @@ function WriteToLHE(showeredEvents::Vector{Event}, outputFile::String, ECM::Floa
 
 
     print("Writing to " * outputFile * " \n")
-    writeLHE(outputFile, showeredEV, ECM^2, ECM, sigma, error)
+    writeLHE(outputFile, showeredEV, eventInfo, eventHeaders)
 
 end
 
@@ -91,4 +92,7 @@ end
 
 using .PartonShower
 
-events, energy = ShowerLHE("ee_hz_ggmumu.lhe.gz");
+events, eventinfo, headers = ShowerLHE("ee_hz_ggmumu.lhe.gz");
+
+
+WriteToLHE(events, "ee_hz_ggmumuOut.lhe", eventinfo, headers)

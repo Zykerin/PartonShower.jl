@@ -1,9 +1,6 @@
-#function writeLHE(infile::String, events::Vector{}, shat, ECM, sigma, stddev)
 
-function writeLHE(infile::String, events::Vector{}, eventinfo::String, alphaS::Float65, weak::Float64)
+function writeLHE(infile::String, events::Vector{}, eventinfo::String, eventHeaders::Vector{})
     
-    lines = split(text, [' ', '\n'])
-
 
     open(infile, "w") do file
     
@@ -12,10 +9,8 @@ function writeLHE(infile::String, events::Vector{}, eventinfo::String, alphaS::F
     write(file, "<!--\n")
     write(file, "File generated with lhe Julia writer\n")
     write(file, "-->\n")
-    write(file, "<init>\n")
-    write(file, eventinfo)
-    #write(file, "\t-11\t 11\t" * string(ECM/2) * "\t" * string(ECM/2) * "\t 0 \t 0 \t 7\t 7 \t 1 \t 1\n")
-    #write(file, "\t" * string(sigma) * "\t" * string(stddev) * "\t1.00000 \t9999\n")
+    write(file, "<init>")
+    write(file, "\t" * eventinfo)
     write(file, "</init>\n")
 
     # Iterate through the events
@@ -51,10 +46,11 @@ function writeLHE(infile::String, events::Vector{}, eventinfo::String, alphaS::F
             end
             
         end
-            #Print this event
+            # Print this event
+            # Write this event's header info
             write(file, "<event>\n")
-            write(file, string(length(momenta)) * "\t 9999\t 1.000000\t" * string(sqrt(shat))* "\t " * weak * " \t " *alphaS *"\n")
-            #write(file, string(length(momenta)) * "\t 9999\t 1.000000\t" * string(sqrt(shat))* "\t 0.0078125 \t 0.1187\n")
+            write(file, string(length(momenta)) * "\t "* string(eventHeaders[eventno][2])* "\t " * string(eventHeaders[eventno][3]) * "\t" * string(eventHeaders[eventno][1])* "\t " * string(eventHeaders[eventno][4]) * " \t " * string(eventHeaders[eventno][5]) *"\n")
+            # Write the actual particles info
             for i in range(1, length(momenta))
                 p = momenta[i]
                 particlestring = string(flavours[i]) * "\t" * string(status[i]) * "\t" * string(relations[i][1]) * "\t" * string(relations[i][2]) * "\t" * string(colours[i]) * "\t" * string(anticolours[i]) * "\t" * string(p[1]) * "\t" * string(p[2]) * "\t" * string(p[3]) *"\t" * string(p[4])* "\t" * string(masses[i]) * "\t0\t"* string(helicities[i]) * "\n" 
