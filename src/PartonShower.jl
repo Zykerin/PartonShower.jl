@@ -41,7 +41,10 @@ function ShowerLHE(inputFile::String)
         end
     end
 
-    eventinfo = lstrip(eventinfo, ' ')
+    
+    #Remove the 'please cite' part of the init text
+    eventinfo = split(eventinfo, "please cite")[1]
+    
     # Read the lhe file and turn the LHEF events into events that the parton shower can work with
     lheevents = parse_lhe(inputFile)
 
