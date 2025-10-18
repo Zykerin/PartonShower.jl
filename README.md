@@ -23,12 +23,17 @@ Pkg.add("PartonShower")
 To run the shower, you need to have a Les Houches Event (LHE) file to use as an input. An example of the proper syntax using the test file `eejj_ECM206.lhe.gz` is below.
 
 ```julia
-showeredEvents, energy = ShowerLHE("eejj_ECM206.lhe.gz")
+showeredEvents, eventInitData, eventHeaders = ShowerLHE("eejj_ECM206.lhe.gz")
 ```
 
-This returns the showered events under `showeredEvents` and the center of mass energy under `energy`. The events are returned as a list of `Event` structures. 
+This returns the showered events under `showeredEvents`, the information in the `\<init\>` of the lhe file, and each event's header information. The full information on the init information is returned as a string while the event headers are returned as a 2-Dimensional list. These variables are only used as an input for the built in `WriteToLHE` function. Using the example filename and variables used above, the proper syntax is:
 
-Along with the `Event` structure there is the `Particle` and `Jet` structures which are layed out below.
+```julia
+WriteToLHE(showeredEvents, "Showeredeejj_ECM206.lhe", eventInitData, eventHeaders)
+```
+
+
+The showered events are returned as a list of `Event` structures. Along with the `Event` structure there is the `Particle` and `Jet` structures which are layed out below.
 
 - `Particle` - Contains the information for one particle
 
@@ -62,15 +67,7 @@ Along with the `Event` structure there is the `Particle` and `Jet` structures wh
     - `Jets` - A list of the jets in the event.
 
 
-The showered events can be used for further analysis, or can be written out to another LHE file using the `WriteToLHE` function. Using an example filename `Showeredeejj_ECM206.lhe`, and the showered events in the previous example, the proper syntax is:
 
-```julia
-sigma = 1.2
-sstdev = 0.6
-WriteToLHE(showeredEvents, "Showeredeejj_ECM206.lhe", energy, sigma, sstdev)
-```
-
-The `sigma` value is the evaluated cross section of the events and the `sstdev` is the error of it.  
 
 <h2> References </h2>
 
