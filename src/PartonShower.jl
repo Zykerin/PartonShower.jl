@@ -26,8 +26,8 @@ function ShowerLHE(inputFile::String)
     #String to hold the event information
     eventinfo::String = ""
 
-    # Get the information about the type of events this file contains'
-    open(EzXML.StreamReader, "ee_hz_ggmumu.lhe.gz") do reader 
+    # Get the information about the type of events this file contains
+    open(EzXML.StreamReader, inputFile) do reader 
 
         #Loop to iterate the file until the event info is found
         while true
@@ -90,12 +90,5 @@ function WriteToLHE(showeredEvents::Vector{Event}, outputFile::String, eventInfo
 
 end
 
-
 end
 
-using .PartonShower
-
-events, eventinfo, headers = ShowerLHE("ee_hz_ggmumu.lhe.gz");
-
-
-WriteToLHE(events, "ee_hz_ggmumuOut.lhe", eventinfo, headers)

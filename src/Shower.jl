@@ -219,7 +219,6 @@ function evolveParticle(pa::Particle, pb::Particle, pc::Particle, Qcut::Float64,
 
     pT = sqrt(emission.pTsq)
     vmsq = getVirtMsq(emission.t, emission.z) # Get the virtuality of the emitting particle
-    pmag = sqrt(pa.px^2 + pa.py^2 + pa.pz^2)
 
     pa.virtuality = vmsq
 
@@ -300,9 +299,13 @@ function showerEvent(event::Event, Qmin::Float64, aSover::Float64)
         end 
     end
 
-    # Set the initial evolution scale for the two progenitors
-    plist[1].t, plist[2].t = EvolutionScale(plist[1], plist[2])
-    
+    # Set the initial evolution scale for the two progenitors by first finding the color partner
+    for p in plist
+        partColor = findColorPartner(p, plist)
+        p.t, partColor.t = EvolutionScale(p, partColor)
+
+    end
+
     # Get the current larges color value for this event
     colors = []
     for p in plist
