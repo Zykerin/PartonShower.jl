@@ -1,8 +1,7 @@
 using StatsBase
 
 global const alpha::Float64 = 1/132.507
-#global const ECM::Float64 = 206
-#global const s::Float64 = ECM^2
+
 # Define GeV to pb conversion
 global const pb::Float64 = 3.894E8
 
@@ -56,20 +55,6 @@ function Af(which::Int64)
 
 end
 
-#=
-global const kappa::Float64 = (sqrt(2) * Gf * (MZ^2))/(4 * pi * alpha)
-global const chi1::Float64 = (kappa * s * (s - MZ^2)) / ((s - MZ^2)^2 + gammaZ^2 * MZ^2)
-global const chi2::Float64 = (kappa^2 * s^2) / ((s - MZ^2)^2 + gammaZ^2 * MZ^2)
-
-
-function A0(which::Int64)
-    return  Qf(which)^2 - 2 * (Qf(which)) * Vf(which) * Vf(4) * chi1 + (Af(4)^2 + Vf(4)^2) * (Af(which)^2 + Vf(which)^2) * chi2
-end
-
-function A1(which::Int64)
-    return -4 * Qf(which) * Af(4) * Af(which) * chi1 + 8 * Af(4) * Vf(4) * Af(which) * Vf(4) * chi2
-end
-=#
 
 # Function for the different charge of the quark
 function eq(q::Int64)
