@@ -1,6 +1,6 @@
 name = "PartonShower"
 uuid = "a32c89ae-d023-4659-8493-2353e71a7a82"
-version = "1.0.0-DEV"
+version = "1.0.0"
 authors = ["Caitlyn G"]
 
 [deps]
