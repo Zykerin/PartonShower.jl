@@ -26,7 +26,7 @@ To run the shower, you need to have a Les Houches Event (LHE) file to use as an 
 showeredEvents, eventInitData, eventHeaders = ShowerLHE("eejj_ECM206.lhe.gz")
 ```
 
-This returns the showered events under `showeredEvents`, the information in the `\<init\>` of the lhe file, and each event's header information. The full information on the init information is returned as a string while the event headers are returned as a 2-Dimensional list. These variables are only used as an input for the built in `WriteToLHE` function. Using the example filename and variables used above, the proper syntax is:
+This returns the showered events under `showeredEvents`, the information in the `<init>` block of the lhe file, and each event's header information. The full information on the init information is returned as a string while the event headers are returned as a 2-Dimensional list. These variables are only used as an input for the built in `WriteToLHE` function. Using the example filename and variables used above, the proper syntax is:
 
 ```julia
 WriteToLHE(showeredEvents, "Showeredeejj_ECM206.lhe", eventInitData, eventHeaders)
@@ -39,7 +39,7 @@ The showered events are returned as a list of `Event` structures. Along with the
 
     - `id` - The PDG id of the particle (ex. 21 = gluon).
     - `status` - The status code of the particle. 
-    - `t` - The starting scale for this particle.
+    - `t` - The starting scale of the shower for this particle.
     - `z` - The light-cone momentum fraction of this particle.
     - `m` - The mass of the particle.
     - `pT` - The transverse momentum of the particle.
