@@ -342,7 +342,6 @@ function showerEvent(event::Event, Qmin::Float64, aSover::Float64)
     checkNaN = []
     for p in newerEvent.AllParticles
         if isnan(p.px)
-            print("px= " * string(p.px) * ", py= " * string(p.py) * ", pz= " * string(p.pz)*", E= " * string(p.E) * "\n")
             append!(checkNaN, true)
         else
             append!(checkNaN, false)
